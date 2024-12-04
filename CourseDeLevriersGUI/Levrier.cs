@@ -25,15 +25,25 @@ namespace CourseDeLevriersGUI
         public void Run()
         {
             depart.WaitOne();
-            for (int i = 0; i < 250; i++)
+            for (int i = 0; i < 100; i++)
             {
-                Thread.Sleep(this.Random.Next(10));
-                trackBar.Invoke(new Action(() =>
+                if (!Form1.Dehors)
                 {
-                    trackBar.Value = i;
-                }));
+                    Thread.Sleep(Random.Next(50));
+                    trackBar.Invoke(new Action(() =>
+                    {
+                        trackBar.Value = i;
+                    }));
+                } else
+                    break;
+                
             }
-            arrivee.Set();
+
+            if (!Form1.Dehors)
+            {
+                arrivee.Set();
+            }
+            
         }
     }
 }
