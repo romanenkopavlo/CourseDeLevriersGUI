@@ -4,12 +4,12 @@ using System.Diagnostics;
 
 namespace CourseDeLevriersGUI
 {
-    public partial class Form1 : Form
+    public partial class CourseDeLevriers : Form
     {
         public static bool Dehors;
-        public static ManualResetEvent[] events = new ManualResetEvent[5];
+        public static ManualResetEvent[] events;
 
-        public Form1()
+        public CourseDeLevriers()
         {
             InitializeComponent();
             this.Text = "Course de levriers";
@@ -24,7 +24,7 @@ namespace CourseDeLevriersGUI
             
             List<int> ordreArrives = new List<int>();
             ManualResetEvent depart = new ManualResetEvent(false);
-            ManualResetEvent[] events = new ManualResetEvent[5];
+            events = new ManualResetEvent[5];
             trackBar1.Value = 0;
             trackBar2.Value = 0;
             trackBar3.Value = 0;
@@ -89,7 +89,7 @@ namespace CourseDeLevriersGUI
 
                     listBox.Invoke(new Action(() =>
                     {
-                        listBox.Items.Add("Levrier " + position + " est arrive. Sa place est " + arrives);
+                        listBox.Items.Add("Levrier " + position + " est arrive. Sa position est " + arrives);
                     }));
                     ordreArrives.Add(position);
                     events[position].Reset();
@@ -101,7 +101,11 @@ namespace CourseDeLevriersGUI
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            Form1.Dehors = true;
+            CourseDeLevriers.Dehors = true;
+            foreach (ManualResetEvent ev in events)
+            {
+                ev.Set();
+            }
         }
     }
 }

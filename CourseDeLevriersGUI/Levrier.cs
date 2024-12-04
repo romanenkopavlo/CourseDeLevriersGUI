@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,26 +25,42 @@ namespace CourseDeLevriersGUI
 
         public void Run()
         {
-            depart.WaitOne();
-            for (int i = 0; i < 100; i++)
-            {
-                if (!Form1.Dehors)
+            if (!CourseDeLevriers.Dehors) {
+                depart.WaitOne();
+                for (int i = 0; i < 100; i++)
                 {
-                    Thread.Sleep(Random.Next(50));
-                    trackBar.Invoke(new Action(() =>
+                    if (CourseDeLevriers.Dehors)
                     {
-                        trackBar.Value = i;
-                    }));
-                } else
-                    break;
-                
-            }
+                        break;
+                    }
 
-            if (!Form1.Dehors)
-            {
-                arrivee.Set();
+                    Thread.Sleep(Random.Next(50));
+
+                    try
+                    {
+                        if (!CourseDeLevriers.Dehors)
+                        {
+                            trackBar.Invoke(new Action(() =>
+                            {
+                                trackBar.Value = i;
+                            }));
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+                    catch (InvalidAsynchronousStateException)
+                    {
+                        break;
+                    }
+                }
+
+                if (!CourseDeLevriers.Dehors)
+                {
+                    arrivee.Set();
+                }
             }
-            
         }
     }
 }

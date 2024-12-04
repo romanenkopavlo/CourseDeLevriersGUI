@@ -1,6 +1,6 @@
 ﻿namespace CourseDeLevriersGUI
 {
-    partial class Form1
+    partial class CourseDeLevriers
     {
         /// <summary>
         ///  Required designer variable.
